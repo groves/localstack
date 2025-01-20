@@ -1,9 +1,12 @@
 import ipaddress
 import json
+import logging
 import re
 import typing as t
 
 from localstack.aws.api.events import InvalidEventPatternException
+
+LOG = logging.getLogger(__name__)
 
 
 class EventRuleEngine:
@@ -44,6 +47,8 @@ class EventRuleEngine:
         # TODO: maybe save/cache the flattened/expanded pattern?
         flat_pattern_conditions = self.flatten_pattern(event_pattern)
         flat_payloads = self.flatten_payload(payload)
+        LOG.info("Checking patterns %s", flat_pattern_conditions)
+        LOG.info("Against %s", flat_payloads)
 
         return any(
             all(
